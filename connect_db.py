@@ -41,5 +41,5 @@ def execute_sql_file(connection, file_path):
 if __name__ == "__main__":
     conn = create_connection()
     if conn:
-        execute_sql_file(conn, 'alx_book_store.sql')
+        execute_sql_file(conn, 'C:/Users/PC/.ipython/Intro_to_DB/database/alx_book_store.sql')
         conn.close()
