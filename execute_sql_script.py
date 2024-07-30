@@ -1,27 +1,53 @@
 import mysql.connector
 from mysql.connector import Error
 
+def check_file_content(filename):
+    """
+    Check the content of the specified file and print it if it's not empty.
+    
+    Args:
+    filename (str): The path to the file to check.
+    """
+    try:
+        # Open and read the file content
+        with open(filename, 'r') as file:
+            content = file.read().strip()
+            
+            # Check if the file content is not empty
+            if content:
+                print("The file is not empty. Content:\n")
+                print(content)
+            else:
+                print("The file is empty.")
+                
+    except FileNotFoundError:
+        print(f"File not found: {filename}")
+
 def execute_script_from_file(filename):
-    connection = None
+    """
+    Execute SQL script from the specified file.
+    
+    Args:
+    filename (str): The path to the SQL script file.
+    """
     try:
         # Read the SQL script
         with open(filename, 'r') as file:
             sql_script = file.read()
-            print("SQL Script Loaded:\n", sql_script)  # Print SQL script for debugging
-
+            
         # Connect to the MySQL database
         connection = mysql.connector.connect(
             host='localhost',
             user='root',
-            password='',  # replace with your MySQL root password
+            password='',  # Replace with your MySQL root password
             database='alx_book_store'
         )
-
+        
         if connection.is_connected():
             cursor = connection.cursor()
-            # Split the script into individual statements and execute them
+            # Execute the script
             for result in cursor.execute(sql_script, multi=True):
-                print(f"Result: {result}")  # Print each result for debugging
+                pass  # Execute the script statement by statement
             
             print("Script executed successfully")
 
@@ -29,10 +55,16 @@ def execute_script_from_file(filename):
         print(f"Error: {e}")
 
     finally:
-        if connection and connection.is_connected():
+        if connection.is_connected():
             cursor.close()
             connection.close()
             print("MySQL connection is closed")
 
-# Replace with the actual path to your SQL script
-execute_script_from_file('C:/Users/PC/.ipython/Intro_to_DB/database/task_2.sql')
+# Path to your SQL script
+file_path = 'C:/Users/PC/.ipython/Intro_to_DB/database/task_2.sql'
+
+# Check the file content
+check_file_content(file_path)
+
+# Execute the SQL script if the file is not empty
+execute_script_from_file(file_path)
