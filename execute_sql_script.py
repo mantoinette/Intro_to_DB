@@ -2,11 +2,13 @@ import mysql.connector
 from mysql.connector import Error
 
 def execute_script_from_file(filename):
-    # Read the SQL script
-    with open(filename, 'r') as file:
-        sql_script = file.read()
-
+    connection = None
     try:
+        # Read the SQL script
+        with open(filename, 'r') as file:
+            sql_script = file.read()
+            print("SQL Script Loaded:\n", sql_script)  # Print SQL script for debugging
+
         # Connect to the MySQL database
         connection = mysql.connector.connect(
             host='localhost',
@@ -19,7 +21,7 @@ def execute_script_from_file(filename):
             cursor = connection.cursor()
             # Split the script into individual statements and execute them
             for result in cursor.execute(sql_script, multi=True):
-                pass  # Execute the script statement by statement
+                print(f"Result: {result}")  # Print each result for debugging
             
             print("Script executed successfully")
 
@@ -27,10 +29,10 @@ def execute_script_from_file(filename):
         print(f"Error: {e}")
 
     finally:
-        if connection.is_connected():
+        if connection and connection.is_connected():
             cursor.close()
             connection.close()
             print("MySQL connection is closed")
 
-# Replace 'C:/path/to/task_2.sql' with the actual path to your SQL script
+# Replace with the actual path to your SQL script
 execute_script_from_file('C:/Users/PC/.ipython/Intro_to_DB/database/task_2.sql')
